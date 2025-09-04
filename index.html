@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍻 N_Eventos</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --primary: #5294e2;
+  --secondary: #7cbeff;
+  --background: #383c4a;
+  --card-bg: #2f343f;
+  --text: #d3dae3;
+  --text-muted: #8b91a0;
+  --success: #73d216;
+  --danger: #cc575d;
+  --warning: #ffc107;
+  --border: #404552;
+  --input-bg: #404552;
+  --shadow: rgba(0, 0, 0, 0.3);
+}
+
+.light-theme {
+  --primary: #2c5282;
+  --secondary: #4299e1;
+  --background: #f0f8ff;
+  --card-bg: #ffffff;
+  --text: #2d3748;
+  --text-muted: #718096;
+  --success: #38a169;
+  --danger: #e53e3e;
+  --warning: #d69e2e;
+  --border: #e2e8f0;
+  --input-bg: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--background);
+  color: var(--text);
+  transition: all 0.3s ease;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border-radius: 15px;
+  color: white;
+  box-shadow: 0 4px 15px var(--shadow);
+}
+h1 { font-size: 2rem; }
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.card {
+  background: var(--card-bg);
+  padding: 25px;
+  margin: 20px 0;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px var(--shadow);
+  border-left: 4px solid var(--secondary); /* línea azul a la izquierda */
+}
+.stitch-image {
+  display: block;
+  margin: 0 auto 20px;
+  max-width: 200px;
+  /*border-radius: 15px;
+  box-shadow: 0 4px 10px var(--shadow);*/
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+label { font-weight: bold; margin-bottom: 5px; display: block; }
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 1rem;
+}
+.btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+.btn-success { background: var(--success); color: white; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-primary { background: var(--primary); color: white; }
+.resultado-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 10px;
+  background: var(--input-bg);
+  border-radius: 6px;
+}
+.chart-container {
+  position: relative;
+  height: 300px;
+  margin-top: 20px;
+}
+.explanation {
+  background-color: var(--input-bg);
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+@media (max-width: 768px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .stitch-image { max-width: 150px; }
+}
+</style>
+</head>
+<body class="dark-theme">
+<div class="header">
+  <h1>🍻 N_Eventos</h1>
+  <button class="theme-toggle" id="themeToggle">🌙</button>
+</div>
+
+<div class="card">
+  <img src="https://pngtotal.com/wp-content/uploads/2024/07/cartoon-stitch-png.png" alt="Stitch" class="stitch-image">
+  <label for="numPersonas">¿Cuántos vais a venir?</label>
+  <input type="number" id="numPersonas" placeholder="Escribe el número de personas" min="1">
+  <button class="btn btn-primary" id="calcular-btn">Calcular</button>
+</div>
+
+<div class="card">
+  <h2>Añadir artículo</h2>
+  <div class="form-grid">
+    <div>
+      <label for="articleName">Artículo</label>
+      <input type="text" id="articleName" placeholder="Ej: Agua, Cerveza...">
+    </div>
+    <div>
+      <label for="articleRatio">Ratio (unidades)</label>
+      <input type="number" id="articleRatio" value="1" step="0.1" min="0.1">
+    </div>
+    <div>
+      <label for="articlePeople">Personas por ratio</label>
+      <input type="number" id="articlePeople" value="1" min="1">
+    </div>
+  </div>
+  <button class="btn btn-success" id="addArticle">Añadir</button>
+  <div class="explanation">
+    <p><strong>Explicación:</strong> Si quieres 0.5 Cocacolas por persona, establece "Ratio" a 0.5 y "Personas por ratio" a 1.</p>
+    <p>Si quieres 1 Cocacola cada 2 personas, establece "Ratio" a 1 y "Personas por ratio" a 2.</p>
+  </div>
+  <div id="articlesList"></div>
+</div>
+
+<div class="card">
+  <h2>Resultados</h2>
+  <div id="results">
+    <div class="resultado-item">Agrega artículos y calcula las cantidades necesarias</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Gráfico</h2>
+  <div class="chart-container">
+    <canvas id="grafico-resultados"></canvas>
+  </div>
+</div>
+
+<script>
+let articles = [];
+let grafico;
+const numPersonasInput = document.getElementById('numPersonas');
+const resultsDiv = document.getElementById('results');
+const calcularBtn = document.getElementById('calcular-btn');
+
+// Agregar artículo
+document.getElementById('addArticle').addEventListener('click', () => {
+  const name = document.getElementById('articleName').value.trim();
+  const ratio = parseFloat(document.getElementById('articleRatio').value);
+  const people = parseInt(document.getElementById('articlePeople').value);
+
+  if (!name || isNaN(ratio) || ratio <= 0 || isNaN(people) || people <= 0) return;
+
+  articles.push({ name, ratio, people });
+  renderArticles();
+  calculateResults();
+  document.getElementById('articleName').value = '';
+});
+
+// Render lista artículos
+function renderArticles() {
+  const list = document.getElementById('articlesList');
+  list.innerHTML = '';
+  if (articles.length === 0) {
+    list.innerHTML = '<p>No hay artículos añadidos</p>';
+    return;
+  }
+  articles.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'resultado-item';
+    div.innerHTML = `
+      <span>${a.name} - ${a.ratio} cada ${a.people} personas</span>
+      <button class="btn btn-danger" onclick="removeArticle(${i})">X</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+// Calcular resultados
+function calculateResults() {
+  const numPersonas = parseInt(numPersonasInput.value);
+  if (isNaN(numPersonas) || numPersonas <= 0 || articles.length === 0) return;
+
+  let html = `<div class="resultado-item"><strong>Para ${numPersonas} personas necesitamos:</strong></div>`;
+  const labels = [], data = [];
+  articles.forEach(a => {
+    const cantidad = Math.ceil((a.ratio * numPersonas) / a.people);
+    html += `<div class="resultado-item"><span>${a.name}:</span><strong>${cantidad}</strong></div>`;
+    labels.push(a.name);
+    data.push(cantidad);
+  });
+  resultsDiv.innerHTML = html;
+  actualizarGrafico(labels, data);
+}
+
+function removeArticle(i) {
+  articles.splice(i, 1);
+  renderArticles();
+  calculateResults();
+}
+
+// Botón calcular
+calcularBtn.addEventListener('click', calculateResults);
+numPersonasInput.addEventListener('input', calculateResults);
+
+// Tema
+const themeToggle = document.getElementById('themeToggle');
+
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light-theme');
+  // Cambiar icono según tema
+  themeToggle.textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
+});
+
+// Inicializar icono al cargar
+themeToggle.textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
+
+
+// Actualizar gráfico tipo pie
+function actualizarGrafico(labels = [], data = []) {
+  const ctx = document.getElementById('grafico-resultados').getContext('2d');
+  
+  if (grafico) grafico.destroy();
+
+  if (labels.length === 0 || data.length === 0) {
+    grafico = new Chart(ctx, {
+      type: 'pie',
+      data: { labels: ['Sin datos'], datasets: [{ data: [1], backgroundColor: ['#404552'], borderWidth: 0 }]},
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{enabled:false}}}
+    });
+    return;
+  }
+
+  const colores = ['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#9966FF','#FF9F40','#8ac6d1','#ff9caf','#7cfc00','#ff69b4','#20b2aa','#ff6347'];
+
+  grafico = new Chart(ctx, {
+    type: 'pie',
+    data: { labels, datasets: [{ data, backgroundColor: colores, borderWidth:2, hoverOffset:15 }]},
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            padding: 20,
+            boxWidth: 20,
+            font: { size: 12 },
+            color: getComputedStyle(document.documentElement).getPropertyValue('--text')
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const articulo = articles[context.dataIndex];
+              const cantidad = Math.ceil((articulo.ratio * parseInt(numPersonasInput.value)) / articulo.people);
+              return `${context.label}: ${cantidad} unidades (Ratio: ${articulo.ratio} cada ${articulo.people})`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
