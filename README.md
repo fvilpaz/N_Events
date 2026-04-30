@@ -1,44 +1,49 @@
+<div align="right">
+  <img src="https://img.shields.io/badge/EN-1a6fc4?style=flat-square" alt="English">
+  &nbsp;<a href="README.es.md"><img src="https://img.shields.io/badge/ES-555555?style=flat-square" alt="Español"></a>
+</div>
+
 # 🍻 N_Events
 
-Planificador de artículos para eventos. Calcula automáticamente cantidades de bebidas y otros artículos según el número de invitados y visualiza los resultados en gráficos interactivos.
+Item planner for events. Automatically calculates quantities of drinks and other items based on the number of guests and displays the results in interactive charts.
 
 ---
 
-## ⚡ Funcionalidades principales
+## ⚡ Main features
 
-- Agregar y eliminar artículos con ratio personalizado
-- Cálculo automático de cantidades por número de personas
-- Resultados en texto y gráfico interactivo (Chart.js)
-- Diseño responsive para escritorio y móviles
-
----
-
-## 🛠️ Tecnologías
-
-- **HTML5 / CSS3** – Estructura y estilo
-- **JavaScript ES6+** – Lógica y cálculos
-- **Chart.js** – Visualización de datos
-- **Git** – Control de versiones
+- Add and remove items with a custom ratio
+- Automatic quantity calculation based on number of people
+- Results in text and interactive chart (Chart.js)
+- Responsive design for desktop and mobile
 
 ---
 
-## 🚀 Cómo usar
+## 🛠️ Technologies
+
+- **HTML5 / CSS3** – Structure and styling
+- **JavaScript ES6+** – Logic and calculations
+- **Chart.js** – Data visualization
+- **Git** – Version control
+
+---
+
+## 🚀 How to use
 
 
-1. Clona el repositorio:
+1. Clone the repository:
 ```
 git clone https://github.com/fvilpaz/N_Events
 ```
-2. Navega a la carpeta:
+2. Navigate to the folder:
 ```
 cd N_Events
 ```
-3. Abre index.html en tu navegador.
+3. Open index.html in your browser.
 
-## 📝 Nota
+## 📝 Note
 
-El proyecto se desarrolló con asistencia de IA para soluciones técnicas y diseño de interfaz, pero todas las decisiones de funcionalidad y flujo de trabajo son propias.
+The project was developed with AI assistance for technical solutions and interface design, but all functionality and workflow decisions are the author's own.
 
-## 📌 Objetivo
+## 📌 Goal
 
-Ayudar a planificar eventos de forma rápida, evitando cálculos manuales y ofreciendo visualización clara de los artículos necesarios.
+Help plan events quickly, avoiding manual calculations and providing a clear visualization of the items needed.
